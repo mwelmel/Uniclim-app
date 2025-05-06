@@ -1,0 +1,36 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+
+.sidebar .nav-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar .nav-link:hover {
+    background-color: #28a745;
+    color: white !important;
+    border-radius: 5px; 
+  }
+  
+
+  .sidebar .nav-link.active {
+    font-weight: bold;
+    background-color: #198754;
+    color: white !important;
+    border-radius: 5px;
+  }
+  
+  
+  .stat-card {
+    min-height: 160px;
+  }
+  
+  .stat-card h2 {
+    margin-bottom: 0.3rem;
+  }
+  
+  .stat-card small {
+    font-size: 0.85rem;
+  }
+  
