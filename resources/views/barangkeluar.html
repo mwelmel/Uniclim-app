@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barang Keluar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="barangkeluarstyle.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark text-white p-3">
+      <img src="images/Logo UniCLim.png" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link text-white" href="dashboard.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="data-barang.html">Data Barang</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="barangmasuk.html">Barang Masuk</a></li>
+        <li class="nav-item"><a class="nav-link active text-success" href="barangkeluar.html">Barang Keluar</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="kalkulator-konversi.html">Kalkulator Konversi</a></li>
+        <hr class="bg-light" />
+        <li class="nav-item"><a class="nav-link text-white" href="account.html">Account</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="settings.html">Settings</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="logout.html">Log Out</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 bg-light">
+      <!-- Header -->
+      <div class="bg-success text-white p-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-1">Barang Keluar</h5>
+          <p class="mb-0" style="font-size: 0.9rem;">Laporan barang keluar hari ini dan sebelumnya</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <input type="text" class="form-control" placeholder="Search here" />
+          <div class="bg-white rounded-circle text-success fw-bold text-center" style="width: 40px; height: 40px; line-height: 40px;">O</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="container my-4">
+        <div class="d-flex justify-content-start gap-3 mb-3">
+          <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Tambah Barang Keluar</button>
+          <a href="kalkulator-konversi.html" class="btn btn-success"><i class="bi bi-plus-circle"></i> Konversi</a>
+          <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Kalkulator</button>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered text-center align-middle">
+          <thead>
+            <tr class="table-success">
+              <th>ID</th>
+              <th>Tanggal</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Harga Awal</th>
+              <th>Harga Dikonversi</th>
+              <th>Ukuran</th>
+              <th>Jumlah</th>
+              <th>Ukuran Dipotong</th>
+              <th>Total</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="barangkeluarscript.js"></script>
+</body>
+</html>
