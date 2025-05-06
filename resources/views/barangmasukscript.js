@@ -47,4 +47,5 @@ const salesChart = new Chart(ctxSales, {
       legend: { position: 'bottom' }
     }
   }
+  
 });
