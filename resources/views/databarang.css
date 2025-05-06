@@ -1,0 +1,47 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .sidebar .nav-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .sidebar .nav-link.active {
+    font-weight: bold;
+    color: #28a745 !important;
+  }
+  
+  .sidebar .nav-link.active {
+    font-weight: bold;
+    background-color: #198754;
+    color: white !important;
+    border-radius: 5px;
+  }
+  
+  .table .btn {
+    width: 60px;
+  }
+  
+  .table thead th {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  input.form-control {
+    max-width: 200px;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  
+    .d-flex {
+      flex-direction: column;
+    }
+  
+    input.form-control {
+      max-width: 100%;
+    }
+  }
+  
