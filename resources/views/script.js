@@ -44,4 +44,10 @@ const revenueChart = new Chart(document.getElementById('revenueChart'), {
       responsive: true
     }
   });
-  
+
+  fetch('http://localhost:8000/api/stats/latest')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    document.querySelector('.stat-card h2.text-success').textContent = data.total_sales;
+  });
