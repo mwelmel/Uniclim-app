@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BarangKeluar extends Model
 {
     use HasFactory;
+    protected $table = 'barang_keluar';
     protected $fillable = [
         'tanggal',
         'kode_barang',
@@ -19,3 +21,4 @@ class BarangKeluar extends Model
         'total',
     ];
 }
+
