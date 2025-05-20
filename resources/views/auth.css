@@ -1,0 +1,93 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0e0f23;
+}
+
+.background {
+    background-image: url('/images/background-pattern.png'); /* ganti dengan pattern sesuai gambar */
+    background-repeat: repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 30px;
+    color: orange;
+}
+
+.logo span {
+    color: lightgreen;
+    font-style: italic;
+}
+
+.login-box {
+    background: white;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #888;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-style: italic;
+}
+
+.input-group .toggle-password {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #666;
+}
+
+button {
+    background: black;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
