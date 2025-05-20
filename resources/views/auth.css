@@ -6,26 +6,26 @@ body, html {
 }
 
 .background {
-    background-image: url('/images/background-pattern.png'); /* ganti dengan pattern sesuai gambar */
-    background-repeat: repeat;
+    background-image: url('images\auth_background.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    position: relative;
 }
 
 .logo {
     position: absolute;
     top: 20px;
     left: 40px;
-    font-size: 30px;
-    color: orange;
 }
 
-.logo span {
-    color: lightgreen;
-    font-style: italic;
+.logo img {
+    height: 50px;
 }
 
 .login-box {
@@ -35,6 +35,7 @@ body, html {
     max-width: 400px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
 .login-box h2 {
