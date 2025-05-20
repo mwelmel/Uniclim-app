@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
 
@@ -8,41 +9,87 @@ class BarangKeluarController extends Controller
 {
     public function index()
     {
-        $data = BarangKeluar::orderBy('tanggal','desc')->get();
-        return  response()->json($data);
+        $barangKeluar = BarangKeluar::orderBy('tanggal', 'desc')->get();
+        return view('barangkeluar', compact('barangKeluar'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal'=>'required|date',
-            'kode_barang'=>'required|string',
-            'nama_barang' => 'required|string',
-            'harga_dikonversi' => 'required|string',
-            'ukuran' => 'required|string',
-            'jumlah' => 'required|integer',
-            'ukuran_dipotong' => 'required|string',
-            'total' => 'required|numeric',
+            'tanggal' => 'required|date',
+            'kode_barang' => 'required|string|max:255',
+            'nama_barang' => 'required|string|max:255',
+            'harga_dikonversi' => 'required|string|max:255',
+            'ukuran' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'ukuran_dipotong' => 'required|string|max:255',
+            'total' => 'required|numeric|min:0',
         ]);
 
         BarangKeluar::create($request->all());
 
-        return response()->json(['message' => 'Barang keluar berhasil ditambahkan']);
+        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
     {
         $barang = BarangKeluar::findOrFail($id);
+
+        $request->validate([
+            'tanggal' => 'required|date',
+            'kode_barang' => 'required|string|max:255',
+            'nama_barang' => 'required|string|max:255',
+            'harga_dikonversi' => 'required|string|max:255',
+            'ukuran' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'ukuran_dipotong' => 'required|string|max:255',
+            'total' => 'required|numeric|min:0',
+        ]);
+
         $barang->update($request->all());
 
-        return response()->json(['message' => 'Barang keluar berhasil diperbarui']);
+        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil diperbarui');
     }
 
     public function destroy($id)
     {
         BarangKeluar::destroy($id);
 
-        return response()->json(['message' => 'Barang keluar berhasil dihapus']);
+        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil dihapus');
     }
 
+    public function edit($id)
+    {
+        $barang = BarangKeluar::findOrFail($id);
+        return view('barangkeluar.edit', compact('barang'));
+    }
+
+    // Fungsi konversi barang
+    public function konversi(Request $request)
+    {
+        $request->validate([
+            'harga_awal' => 'required|numeric',
+            'ukuran' => 'required|numeric',
+            'ukuran_dipotong' => 'required|numeric',
+        ]);
+
+        $harga_awal = $request->harga_awal;
+        $ukuran = $request->ukuran;
+        $ukuran_dipotong = $request->ukuran_dipotong;
+
+        if ($ukuran == 0) {
+            return response()->json([
+                'error' => 'Ukuran tidak boleh nol.'
+            ], 422);
+        }
+
+        $harga_dikonversi = ($ukuran_dipotong / $ukuran) * $harga_awal;
+        $jumlah = $request->input('jumlah', 1);
+        $total = $harga_dikonversi * $jumlah;
+
+        return response()->json([
+            'harga_dikonversi' => round($harga_dikonversi, 2),
+            'total' => round($total, 2),
+        ]);
+    }
 }
