@@ -8,23 +8,29 @@
 <body>
     <div class="background">
         <div class="logo">
-            <img src="{{ asset('images\Logo UniCLim.png') }}" alt="UniClim Logo">
+            <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo">
         </div>
 
         <div class="login-box">
             <h2>Log in</h2>
-            <form>
+            <form method="POST" action="{{ url('/login') }}">
+                @csrf
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required>
                 </div>
                 <div class="input-group">
                     <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Password" id="password">
+                    <input type="password" name="password" placeholder="Password" id="password" required>
                     <i class="fa fa-eye toggle-password" onclick="togglePassword()"></i>
                 </div>
+                @if ($errors->any())
+                    <div class="error-message">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
                 <div class="options">
-                    <label><input type="checkbox"> Remember Me</label>
+                    <label><input type="checkbox" name="remember"> Remember Me</label>
                     <a href="#">Forgot Password?</a>
                 </div>
                 <button type="submit">Log in</button>
