@@ -23,4 +23,9 @@ class AuthController extends Controller
         'username' => 'Invalid username or password.',
     ])->onlyInput('username');
     }
+    public function showLoginForm()
+    {
+    return view('auth.login');
+    }
+
 }
