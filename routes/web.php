@@ -5,6 +5,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\BarangKeluarController;
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
 // Redirect root to dashboard
 Route::get('/', function () {
     return redirect('/dashboard');
