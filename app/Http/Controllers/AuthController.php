@@ -3,29 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Account;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-    $credentials = $request->validate([
-        'username' => ['required', 'string'],
-        'password' => ['required', 'string'],
-    ]);
+        $account = Account::where('username', $request->username)->first();
 
-    if (Auth::attempt($credentials, $request->filled('remember'))) {
-        $request->session()->regenerate();
-        return redirect()->intended('/dashboard');
+        if ($account && Hash::check($request->password, $account->password)) {
+            Session::put('account_id', $account->id);
+            return redirect('/dashboard');
+        } else {
+            return back()->withErrors(['Username atau password salah.']);
+        }
     }
 
-    return back()->withErrors([
-        'username' => 'Invalid username or password.',
-    ])->onlyInput('username');
-    }
-    public function showLoginForm()
+    public function accountPage()
     {
-    return view('auth.login');
+        $account = Account::find(Session::get('account_id'));
+        return view('account', compact('account'));
     }
 
+    public function updateAccount(Request $request)
+    {
+        $account = Account::find(Session::get('account_id'));
+
+        $request->validate([
+            'username' => 'required|unique:accounts,username,' . $account->id,
+            'password' => 'nullable|min:6',
+        ]);
+
+        $account->username = $request->username;
+        if ($request->filled('password')) {
+            $account->password = Hash::make($request->password);
+        }
+
+        $account->save();
+
+        // Redirect langsung ke dashboard setelah update berhasil
+        return redirect('/dashboard')->with('success', 'Data akun berhasil diperbarui.');
+    }
 }

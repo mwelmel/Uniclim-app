@@ -6,18 +6,18 @@ use App\Http\Controllers\StatController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/login', [AuthController::class, 'showLoginForm']);
-
-
-// Redirect root to dashboard
-Route::get('/', function () {
-    return redirect('/dashboard');
+Route::get('/login', function () {
+    return view('auth.login');
 });
-
-// Authentication routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/account', [AuthController::class, 'accountPage']);
+Route::post('/account/update', [AuthController::class, 'updateAccount']);
+
+// Redirect root to login
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 // Dashboard route (controller handles data passing)
 Route::get('/dashboard', [DashboardController::class, 'index']);
