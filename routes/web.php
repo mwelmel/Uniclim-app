@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangMasukController;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -34,4 +35,10 @@ Route::put('/barangkeluar/{id}', [BarangKeluarController::class, 'update'])->nam
 Route::delete('/barangkeluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barangkeluar.destroy');
 Route::post('barangkeluar/konversi', [BarangKeluarController::class, 'konversi'])->name('barangkeluar.konversi');
 
-
+// Barang Masuk routes
+Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
+Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
+Route::get('/barangmasuk/{id}/edit', [BarangMasukController::class, 'edit'])->name('barangmasuk.edit');
+Route::put('/barangmasuk/{id}', [BarangMasukController::class, 'update'])->name('barangmasuk.update');
+Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
+Route::post('/barangmasuk/konversi', [BarangMasukController::class, 'konversi'])->name('barangmasuk.konversi');
