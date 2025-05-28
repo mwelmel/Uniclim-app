@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Barang Keluar</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="barangmasukstyle.css"/>
+  <link rel="stylesheet" href="{{ asset('barangmasukstyle.css') }}"/>
 </head>
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
-    <div class="sidebar bg-dark text-white p-3">
-      <img src="images/Logo UniCLim.png" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
+    <div class="sidebar bg-dark text-white p-3" style="min-width: 200px;">
+      <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white" href="dashboard.html">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="databarang.html">Data Barang</a></li>
-        <li class="nav-item"><a class="nav-link active text-success" href="barangmasuk.html">Barang Masuk</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="barangkeluar.html">Barang Keluar</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/dashboard') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/databarang') }}">Data Barang</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/barangmasuk') }}">Barang Masuk</a></li>
+        <li class="nav-item"><a class="nav-link active text-success" href="{{ url('/barangkeluar') }}">Barang Keluar</a></li>
         <hr class="bg-light" />
-        <li class="nav-item"><a class="nav-link text-white" href="account.html">Account</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="settings.html">Settings</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="logout.html">Log Out</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/account') }}">Account</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/settings') }}">Settings</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/logout') }}">Log Out</a></li>
       </ul>
     </div>
 
@@ -167,6 +167,6 @@
     </div>
   </div>
 
-  <script src="barangmasukscript.js"></script>
+  <script src="{{ asset('barangmasukscript.js') }}"></script>
 </body>
 </html>
