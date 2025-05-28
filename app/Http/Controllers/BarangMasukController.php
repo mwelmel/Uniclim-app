@@ -9,7 +9,7 @@ class BarangMasukController extends Controller
 {
     public function index()
     {
-        $barangKeluar = BarangMasuk::orderBy('tanggal', 'desc')->get();
+        $barangmasuk = BarangMasuk::orderBy('tanggal', 'desc')->get();
         return view('barangmasuk', compact('barangmasuk'));
     }
 
