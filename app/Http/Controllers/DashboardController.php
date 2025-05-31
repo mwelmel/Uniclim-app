@@ -1,26 +1,44 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Fetch data from the database or any other source
-        $userName = 'John Doe'; // Example user name
-        $totalSales = 1000; // Example total sales
-        $salesRevenue = 50000; // Example sales revenue
-        $totalOrders = 200; // Example total orders
-        $refunded = 50; // Example refunded amount
+{
+    $userName = auth()->user()->name ?? 'User';
 
-        return view('dashboard', [
-            'userName' => $userName,
-            'totalSales' => $totalSales,
-            'salesRevenue' => $salesRevenue,
-            'totalOrders' => $totalOrders,
-            'refunded' => $refunded,
-        ]);
+    $barangKeluar = BarangKeluar::all();
+
+    $totalSales = $barangKeluar->sum('jumlah');
+    $salesRevenue = $barangKeluar->sum(fn($item) => $item->jumlah * $item->harga_dikonversi);
+    $totalOrders = $barangKeluar->count();
+    $refunded = 0; // Bisa dimodifikasi jika ada field "status" untuk return
+
+    // Data grafik per bulan
+    $monthlySales = BarangKeluar::selectRaw('MONTH(tanggal) as month, SUM(jumlah * harga_dikonversi) as total')
+        ->groupByRaw('MONTH(tanggal)')
+        ->pluck('total', 'month');
+
+    $monthlyLabels = [];
+    $monthlyData = [];
+
+    foreach (range(1, 12) as $month) {
+        $monthlyLabels[] = Carbon::create()->month($month)->format('F');
+        $monthlyData[] = $monthlySales[$month] ?? 0;
     }
+
+    return view('dashboard', compact(
+        'userName',
+        'totalSales',
+        'salesRevenue',
+        'totalOrders',
+        'refunded',
+        'monthlyLabels',
+        'monthlyData'
+    ));
+}
 }
