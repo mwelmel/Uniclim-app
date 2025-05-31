@@ -6,6 +6,8 @@ use App\Http\Controllers\StatController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\BarangController;
+
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -26,6 +28,10 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 // API/statistik routes
 Route::get('/stats/latest', [StatController::class, 'latest']);
 Route::post('/stats', [StatController::class, 'store']);
+
+//Data Barang routes
+Route::get('/databarang', [BarangController::class, 'index'])->name('databarang');
+
 
 // Barang Keluar routes
 Route::get('/barangkeluar', [BarangKeluarController::class, 'index'])->name('barangkeluar.index');

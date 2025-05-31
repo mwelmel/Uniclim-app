@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    background-color: #006400;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    width: 400px;
+    z-index: 1000;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .inputs {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .inputs input {
+    width: 60px;
+    text-align: center;
+    font-size: 18px;
+  }
+  
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .keypad button {
+    padding: 15px;
+    font-size: 18px;
+    background-color: white;
+    color: #006400;
+    border: none;
+    border-radius: 8px;
+  }
+  
