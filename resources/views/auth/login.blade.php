@@ -29,10 +29,6 @@
                         {{ $errors->first() }}
                     </div>
                 @endif
-                <div class="options">
-                    <label><input type="checkbox" name="remember"> Remember Me</label>
-                    <a href="#">Forgot Password?</a>
-                </div>
                 <button type="submit">Log in</button>
             </form>
         </div>
