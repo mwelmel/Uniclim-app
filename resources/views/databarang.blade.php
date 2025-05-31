@@ -14,9 +14,9 @@
       <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
       <ul class="nav flex-column">
         <li class="nav-item"><a class="nav-link text-white" href="{{ url('/dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/databarang') }}">Data Barang</a></li>
+        <li class="nav-item"><a class="nav-link active text-success" href="{{ url('/databarang') }}">Data Barang</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="{{ url('/barangmasuk') }}">Barang Masuk</a></li>
-        <li class="nav-item"><a class="nav-link active text-success" href="{{ url('/barangkeluar') }}">Barang Keluar</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/barangkeluar') }}">Barang Keluar</a></li>
         <hr class="bg-light" />
         <li class="nav-item"><a class="nav-link text-white" href="{{ url('/account') }}">Account</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="{{ url('/settings') }}">Settings</a></li>
@@ -41,80 +41,68 @@
       <!-- Content -->
       <div class="container my-4">
 
+        <!-- Tombol untuk buka modal -->
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahModal">Tambah Barang</button>
+        </div>
+
         <table class="table table-bordered text-center align-middle">
-            <thead>
-              <tr class="table-success">
-                <th>ID</th>
-                <th>Tanggal</th>
-                <th>Kode Barang</th>
-                <th>Nama Barang</th>
-                <th>Harga</th>
-                <th>Ukuran</th>
-                <th>Jumlah</th>
-              </tr>
-            </thead>
-            <tbody>
+          <thead>
+            <tr class="table-success">
+              <th>ID</th>
+              <th>Tanggal</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Harga</th>
+              <th>Ukuran</th>
+              <th>Jumlah</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($dataBarang as $barang)
               <tr>
-                <td>17482</td>
-                <td>Today</td>
-                <td>83927</td>
-                <td>Fauget Cafe</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
+                <td>{{ $barang->id }}</td>
+                <td>{{ $barang->tanggal }}</td>
+                <td>{{ $barang->kode_barang }}</td>
+                <td>{{ $barang->nama_barang }}</td>
+                <td>{{ $barang->harga }}</td>
+                <td>{{ $barang->ukuran }}</td>
+                <td>{{ $barang->jumlah }}</td>
               </tr>
-              <tr>
-                <td>24245</td>
-                <td>Today</td>
-                <td>31749</td>
-                <td>Claudia Store</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>35242</td>
-                <td>Today</td>
-                <td>13901</td>
-                <td>Chidi Barber</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>48463</td>
-                <td>Today</td>
-                <td>46283</td>
-                <td>Yael Amari</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>57825</td>
-                <td>Yesterday</td>
-                <td>38473</td>
-                <td>Larana, Inc.</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
-              </tr>
-              <tr>
-                <td>56246</td>
-                <td>Yesterday</td>
-                <td>28393</td>
-                <td>Larana, Inc.</td>
-                <td>Rp5.000.000</td>
-                <td>3 Meter</td>
-                <td>70</td>
-              </tr>
-            </tbody>
-          </table>
-          
+            @endforeach
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <script src="{{ asset('databarang.js') }}"></script>
+  <!-- Modal Tambah Barang -->
+  <div class="modal fade" id="tambahModal" tabindex="-1">
+    <div class="modal-dialog">
+      <form action="{{ route('barang.store') }}" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Barang</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="date" name="tanggal" class="form-control mb-2" required placeholder="Tanggal">
+            <input type="text" name="kode_barang" class="form-control mb-2" required placeholder="Kode Barang">
+            <input type="text" name="nama_barang" class="form-control mb-2" required placeholder="Nama Barang">
+            <input type="number" name="harga" class="form-control mb-2" required placeholder="Harga">
+            <input type="text" name="ukuran" class="form-control mb-2" required placeholder="Ukuran">
+            <input type="number" name="jumlah" class="form-control mb-2" required placeholder="Jumlah">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

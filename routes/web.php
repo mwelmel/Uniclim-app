@@ -19,7 +19,7 @@ Route::post('/account/update', [AuthController::class, 'updateAccount']);
 
 // Redirect root to login
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/dashboard');
 });
 
 // Dashboard route (controller handles data passing)
@@ -31,7 +31,9 @@ Route::post('/stats', [StatController::class, 'store']);
 
 //Data Barang routes
 Route::get('/databarang', [BarangController::class, 'index'])->name('databarang');
-
+Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
+Route::put('/barang/{id}', [BarangController::class, 'update'])->name('barang.update');
+Route::delete('/barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
 
 // Barang Keluar routes
 Route::get('/barangkeluar', [BarangKeluarController::class, 'index'])->name('barangkeluar.index');

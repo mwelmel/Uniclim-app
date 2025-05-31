@@ -35,7 +35,7 @@
           <p class="mb-0" style="font-size: 0.9rem;">Laporan barang keluar hari ini dan sebelumnya</p>
         </div>
         <div class="d-flex align-items-center gap-3">
-          <input type="text" class="form-control" placeholder="Search here" />
+          <!-- <input type="text" class="form-control" placeholder="Search here" /> -->
           <div class="bg-white rounded-circle text-success fw-bold text-center" style="width: 40px; height: 40px; line-height: 40px;">
             {{ strtoupper(substr(Auth::user()->name ?? 'O', 0, 1)) }}
           </div>
@@ -45,12 +45,9 @@
       <!-- Action Buttons -->
       <div class="container my-4">
         <div class="d-flex justify-content-start gap-3 mb-3">
-          <!-- Button to open modal -->
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
             <i class="bi bi-plus-circle"></i> Tambah Barang Keluar
           </button>
-          <a href="{{ url('/kalkulatorkonversi') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Konversi</a>
-          <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Kalkulator</button>
         </div>
 
         <!-- Table -->
@@ -111,28 +108,33 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="tanggal" class="form-label">Tanggal</label>
-              <input type="date" class="form-control" id="tanggal" name="tanggal" required />
+            <label for="tanggal" class="form-label">Tanggal</label>
+            <input type="date" class="form-control" id="tanggal" name="tanggal" required value="{{ \Carbon\Carbon::now()->toDateString() }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="nama_barang" class="form-label">Nama Barang</label>
+              <select id="nama_barang" class="form-select" required>
+                <option value="">-- Pilih Barang --</option>
+                @foreach ($barangList as $barang)
+                  <option value="{{ $barang->nama_barang }}" data-kode="{{ $barang->kode_barang }}" data-harga="{{ $barang->harga }}" data-ukuran="{{ $barang->ukuran }}">
+                    {{ $barang->nama_barang }}
+                  </option>
+                @endforeach
+              <input type="hidden" name="nama_barang" id="nama_barang_hidden">
+              </select>
             </div>
             <div class="mb-3">
               <label for="kode_barang" class="form-label">Kode Barang</label>
-              <input type="text" class="form-control" id="kode_barang" name="kode_barang" required />
-            </div>
-            <div class="mb-3">
-              <label for="nama_barang" class="form-label">Nama Barang</label>
-              <input type="text" class="form-control" id="nama_barang" name="nama_barang" required />
+              <input type="text" class="form-control" id="kode_barang" name="kode_barang" readonly />
             </div>
             <div class="mb-3">
               <label for="harga_awal" class="form-label">Harga Awal</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="harga_awal" name="harga_awal" />
-            </div>
-            <div class="mb-3">
-              <label for="harga_dikonversi" class="form-label">Harga Dikonversi</label>
-              <input type="number" step="0.01" class="form-control" id="harga_dikonversi" name="harga_dikonversi" readonly />
+              <input type="number" step="0.01" min="0" class="form-control" id="harga_awal" name="harga_awal" readonly />
             </div>
             <div class="mb-3">
               <label for="ukuran" class="form-label">Ukuran</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="ukuran" name="ukuran" required />
+              <input type="number" step="0.01" min="0" class="form-control" id="ukuran" name="ukuran" readonly />
             </div>
             <div class="mb-3">
               <label for="jumlah" class="form-label">Jumlah</label>
@@ -141,6 +143,10 @@
             <div class="mb-3">
               <label for="ukuran_dipotong" class="form-label">Ukuran Dipotong</label>
               <input type="number" step="0.01" min="0" class="form-control" id="ukuran_dipotong" name="ukuran_dipotong" required />
+            </div>
+            <div class="mb-3">
+              <label for="harga_dikonversi" class="form-label">Harga Dikonversi</label>
+              <input type="number" step="0.01" class="form-control" id="harga_dikonversi" name="harga_dikonversi" readonly />
             </div>
             <div class="mb-3">
               <label for="total" class="form-label">Total</label>
@@ -160,7 +166,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
   <script>
     $(document).ready(function () {
       $('#barangKeluarTable').DataTable();
@@ -180,15 +185,8 @@
         $.ajax({
           url: "{{ route('barangkeluar.konversi') }}",
           type: "POST",
-          headers: {
-            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-          },
-          data: {
-            harga_awal: harga_awal,
-            ukuran: ukuran,
-            ukuran_dipotong: ukuran_dipotong,
-            jumlah: jumlah
-          },
+          headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+          data: { harga_awal, ukuran, ukuran_dipotong, jumlah },
           success: function (data) {
             $('#harga_dikonversi').val(data.harga_dikonversi);
             $('#total').val(data.total);
@@ -202,6 +200,21 @@
       }
 
       $('#harga_awal, #ukuran, #ukuran_dipotong, #jumlah').on('input', hitungKonversi);
+
+      $('#nama_barang').on('change', function () {
+        const selected = $(this).find(':selected');
+        const kode = selected.data('kode') || '';
+        const harga = selected.data('harga') || '';
+        const ukuran = selected.data('ukuran') || '';
+        const nama = selected.val();
+
+        $('#kode_barang').val(kode);
+        $('#harga_awal').val(harga);
+        $('#ukuran').val(ukuran);
+        $('#nama_barang_hidden').val(nama);
+
+        hitungKonversi();
+      });
     });
   </script>
 </body>
