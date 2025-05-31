@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangKeluar;
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 class BarangKeluarController extends Controller
 {
     public function index()
     {
-        $barangKeluar = BarangKeluar::orderBy('tanggal', 'desc')->get();
-        return view('barangkeluar', compact('barangKeluar'));
+        $barangKeluar = BarangKeluar::all();
+        $barangList = Barang::all(); // Ambil data barang
+        return view('barangkeluar', compact('barangKeluar', 'barangList'));
     }
 
     public function store(Request $request)

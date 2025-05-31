@@ -13,5 +13,42 @@ class BarangController extends Controller
         return view('databarang', compact('dataBarang'));
     }
 
-    // Tambahan method lain jika perlu: create, store, edit, update, delete, dll.
+    public function store(Request $request)
+    {
+    $request->validate([
+        'tanggal' => 'required|date',
+        'kode_barang' => 'required',
+        'nama_barang' => 'required',
+        'harga' => 'required|integer',
+        'ukuran' => 'required',
+        'jumlah' => 'required|integer',
+    ]);
+
+    Barang::create($request->all());
+
+    return redirect()->back()->with('success', 'Barang berhasil ditambahkan!');
+    }
+    public function update(Request $request, $id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        $request->validate([
+            'tanggal' => 'required|date',
+            'kode_barang' => 'required',
+            'nama_barang' => 'required',
+            'harga' => 'required|integer',
+            'ukuran' => 'required',
+            'jumlah' => 'required|integer',
+        ]);
+
+        $barang->update($request->all());
+
+        return redirect()->back()->with('success', 'Barang berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        Barang::destroy($id);
+        return redirect()->back()->with('success', 'Barang berhasil dihapus!');
+    }
 }
