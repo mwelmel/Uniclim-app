@@ -23,6 +23,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/account', [AuthController::class, 'accountPage']);
 Route::post('/account/update', [AuthController::class, 'updateAccount']);
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/account', [AuthController::class, 'accountPage']);
+    Route::post('/account/update', [AuthController::class, 'updateAccount']);
+});
+
 // Redirect root to login
 Route::get('/', function () {
     return redirect('/login');

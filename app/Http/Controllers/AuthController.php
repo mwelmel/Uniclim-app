@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Account;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -14,7 +14,7 @@ class AuthController extends Controller
         $account = Account::where('username', $request->username)->first();
 
         if ($account && Hash::check($request->password, $account->password)) {
-            Session::put('account_id', $account->id);
+            Auth::login($account); // Gunakan Auth bawaan Laravel
             return redirect('/dashboard');
         } else {
             return back()->withErrors(['Username atau password salah.']);
@@ -23,13 +23,13 @@ class AuthController extends Controller
 
     public function accountPage()
     {
-        $account = Account::find(Session::get('account_id'));
+        $account = auth()->user(); // Ambil data user yang sedang login
         return view('account', compact('account'));
     }
 
     public function updateAccount(Request $request)
     {
-        $account = Account::find(Session::get('account_id'));
+        $account = auth()->user(); // Ambil data user yang sedang login
 
         $request->validate([
             'username' => 'required|unique:accounts,username,' . $account->id,
@@ -37,13 +37,13 @@ class AuthController extends Controller
         ]);
 
         $account->username = $request->username;
+
         if ($request->filled('password')) {
             $account->password = Hash::make($request->password);
         }
 
         $account->save();
 
-        // Redirect langsung ke dashboard setelah update berhasil
         return redirect('/dashboard')->with('success', 'Data akun berhasil diperbarui.');
     }
 }
