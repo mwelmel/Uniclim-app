@@ -27,9 +27,19 @@
         <hr class="bg-light" />
         <li class="nav-item"><a class="nav-link text-white" href="/account">Account</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/settings">Settings</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/logout">Log Out</a></li>
+
+        <!-- Logout dengan form POST -->
+        <li class="nav-item">
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+           @csrf
+          </form>
+          <a href="#" class="nav-link text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Log Out
+          </a>
+        </li>
       </ul>
     </div>
+
 
     <!-- Main Content -->
     <div class="flex-grow-1 bg-light min-vh-100">
