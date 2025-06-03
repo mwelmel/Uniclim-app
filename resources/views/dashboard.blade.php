@@ -26,7 +26,7 @@
         <li class="nav-item"><a class="nav-link text-white" href="/barangkeluar">Barang Keluar</a></li>
         <hr class="bg-light" />
         <li class="nav-item"><a class="nav-link text-white" href="/account">Account</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/settings">Settings</a></li>
+        
 
         <!-- Logout dengan form POST -->
         <li class="nav-item">
@@ -51,8 +51,7 @@
         </div>
         <div class="d-flex align-items-center gap-3">
           <!-- <input type="text" class="form-control" placeholder="Search here" style="max-width: 250px;" /> -->
-          <div class="bg-white rounded-circle text-success fw-bold text-center" style="width: 40px; height: 40px; line-height: 40px;">
-            {{ strtoupper(substr($userName ?? 'U', 0, 1)) }}
+          <div style="width: 40px; height: 40px; line-height: 40px;">
           </div>
         </div>
       </div>
