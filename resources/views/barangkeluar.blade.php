@@ -12,19 +12,29 @@
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
-    <div class="sidebar bg-dark text-white p-3" style="min-width: 200px;">
+    <div class="sidebar bg-dark text-white p-3" style="width: 220px; min-height: 100vh;">
       <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/databarang') }}">Data Barang</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/barangmasuk') }}">Barang Masuk</a></li>
-        <li class="nav-item"><a class="nav-link active text-success" href="{{ url('/barangkeluar') }}">Barang Keluar</a></li>
+        <li class="nav-item"><a class="nav-link active text-success" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/databarang">Data Barang</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/barangmasuk">Barang Masuk</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/barangkeluar">Barang Keluar</a></li>
         <hr class="bg-light" />
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/account') }}">Account</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/settings') }}">Settings</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{{ url('/logout') }}">Log Out</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/account">Account</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/settings">Settings</a></li>
+
+        <!-- Logout dengan form POST -->
+        <li class="nav-item">
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+           @csrf
+          </form>
+          <a href="#" class="nav-link text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Log Out
+          </a>
+        </li>
       </ul>
     </div>
+
 
     <!-- Main Content -->
     <div class="flex-grow-1 bg-light">

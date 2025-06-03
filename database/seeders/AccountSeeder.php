@@ -3,16 +3,20 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Account;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Account;
 
 class AccountSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        Account::create([
-            'username' => 'admin',
-            'password' => Hash::make('admin123'),
-        ]);
+        $usernames = ['Chandra', 'Angelique', 'Tommy', 'Thomas', 'Dept.Head', 'Marketing', 'Admin'];
+
+        foreach ($usernames as $username) {
+            Account::create([
+                'username' => $username,
+                'password' => Hash::make('UGS.123'),
+            ]);
+        }
     }
 }

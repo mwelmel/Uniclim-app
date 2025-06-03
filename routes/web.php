@@ -7,6 +7,12 @@ use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangController;
+use Illuminate\Support\Facades\Auth;
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 
 Route::get('/login', function () {
@@ -19,7 +25,7 @@ Route::post('/account/update', [AuthController::class, 'updateAccount']);
 
 // Redirect root to login
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect('/login');
 });
 
 // Dashboard route (controller handles data passing)
