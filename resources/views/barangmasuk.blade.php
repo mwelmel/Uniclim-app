@@ -15,7 +15,7 @@
     <div class="sidebar bg-dark text-white p-3" style="width: 220px; min-height: 100vh;">
       <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link active text-success" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/dashboard">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/databarang">Data Barang</a></li>
         <li class="nav-item"><a class="nav-link active text-success" href="/barangmasuk">Barang Masuk</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/barangkeluar">Barang Keluar</a></li>
@@ -66,11 +66,9 @@
               <th>Tanggal</th>
               <th>Kode Barang</th>
               <th>Nama Barang</th>
-              <th>Harga Awal</th>
-              <th>Harga Dikonversi</th>
+              <th>Harga</th>
               <th>Ukuran</th>
               <th>Jumlah</th>
-              <th>Ukuran Dipotong</th>
               <th>Total</th>
               <th>Aksi</th>
             </tr>
@@ -82,11 +80,9 @@
               <td>{{ $barang->tanggal }}</td>
               <td>{{ $barang->kode_barang }}</td>
               <td>{{ $barang->nama_barang }}</td>
-              <td>{{ $barang->harga_awal ?? '-' }}</td>
-              <td>{{ $barang->harga_dikonversi }}</td>
+              <td>{{ $barang->harga }}</td>
               <td>{{ $barang->ukuran }}</td>
               <td>{{ $barang->jumlah }}</td>
-              <td>{{ $barang->ukuran_dipotong }}</td>
               <td>{{ $barang->total }}</td>
               <td>
                 <a href="{{ route('barangmasuk.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br />
@@ -128,13 +124,13 @@
               <input type="text" class="form-control" id="nama_barang" name="nama_barang" required />
             </div>
             <div class="mb-3">
-              <label for="harga_awal" class="form-label">Harga Awal</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="harga_awal" name="harga_awal" />
+              <label for="harga" class="form-label">Harga</label>
+              <input type="number" step="0.01" min="0" class="form-control" id="harga" name="harga" />
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label for="harga_dikonversi" class="form-label">Harga Dikonversi</label>
               <input type="number" step="0.01" class="form-control" id="harga_dikonversi" name="harga_dikonversi" readonly />
-            </div>
+            </div> -->
             <div class="mb-3">
               <label for="ukuran" class="form-label">Ukuran</label>
               <input type="number" step="0.01" min="0" class="form-control" id="ukuran" name="ukuran" required />
@@ -143,10 +139,10 @@
               <label for="jumlah" class="form-label">Jumlah</label>
               <input type="number" min="1" class="form-control" id="jumlah" name="jumlah" required value="1" />
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label for="ukuran_dipotong" class="form-label">Ukuran Dipotong</label>
               <input type="number" step="0.01" min="0" class="form-control" id="ukuran_dipotong" name="ukuran_dipotong" required />
-            </div>
+            </div> -->
             <div class="mb-3">
               <label for="total" class="form-label">Total</label>
               <input type="number" step="0.01" class="form-control" id="total" name="total" readonly />
@@ -170,44 +166,44 @@
     $(document).ready(function () {
       $('#barangmasukTable').DataTable();
 
-      function hitungKonversi() {
-        let harga_awal = parseFloat($('#harga_awal').val()) || 0;
-        let ukuran = parseFloat($('#ukuran').val()) || 0;
-        let ukuran_dipotong = parseFloat($('#ukuran_dipotong').val()) || 0;
-        let jumlah = parseInt($('#jumlah').val()) || 1;
+      // function hitungKonversi() {
+      //   let harga_awal = parseFloat($('#harga_awal').val()) || 0;
+      //   let ukuran = parseFloat($('#ukuran').val()) || 0;
+      //   let ukuran_dipotong = parseFloat($('#ukuran_dipotong').val()) || 0;
+      //   let jumlah = parseInt($('#jumlah').val()) || 1;
 
-        if (harga_awal <= 0 || ukuran <= 0 || ukuran_dipotong <= 0) {
-          $('#harga_dikonversi').val('');
-          $('#total').val('');
-          return;
-        }
+      //   if (harga_awal <= 0 || ukuran <= 0 || ukuran_dipotong <= 0) {
+      //     $('#harga_dikonversi').val('');
+      //     $('#total').val('');
+      //     return;
+      //   }
 
-        $.ajax({
-          url: "{{ route('barangkeluar.konversi') }}",
-          type: "POST",
-          headers: {
-            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-          },
-          data: {
-            harga_awal: harga_awal,
-            ukuran: ukuran,
-            ukuran_dipotong: ukuran_dipotong,
-            jumlah: jumlah
-          },
-          success: function (data) {
-            $('#harga_dikonversi').val(data.harga_dikonversi);
-            $('#total').val(data.total);
-          },
-          error: function (xhr) {
-            console.error(xhr.responseJSON?.error || 'Terjadi kesalahan konversi');
-            $('#harga_dikonversi').val('');
-            $('#total').val('');
-          }
-        });
-      }
+    //     $.ajax({
+    //       url: "{{ route('barangkeluar.konversi') }}",
+    //       type: "POST",
+    //       headers: {
+    //         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    //       },
+    //       data: {
+    //         harga_awal: harga_awal,
+    //         ukuran: ukuran,
+    //         ukuran_dipotong: ukuran_dipotong,
+    //         jumlah: jumlah
+    //       },
+    //       success: function (data) {
+    //         $('#harga_dikonversi').val(data.harga_dikonversi);
+    //         $('#total').val(data.total);
+    //       },
+    //       error: function (xhr) {
+    //         console.error(xhr.responseJSON?.error || 'Terjadi kesalahan konversi');
+    //         $('#harga_dikonversi').val('');
+    //         $('#total').val('');
+    //       }
+    //     });
+    //   }
 
-      $('#harga_awal, #ukuran, #ukuran_dipotong, #jumlah').on('input', hitungKonversi);
-    });
+    //   $('#harga_awal, #ukuran, #ukuran_dipotong, #jumlah').on('input', hitungKonversi);
+    // });
   </script>
 </body>
 </html>

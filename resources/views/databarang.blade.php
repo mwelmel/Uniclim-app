@@ -42,7 +42,7 @@
           <p class="mb-0" style="font-size: 0.9rem;">Daftar Semua Barang Yang Tersedia</p>
         </div>
         <div class="d-flex align-items-center gap-3">
-          <input type="text" class="form-control" placeholder="Search here" />
+          <!-- <input type="text" class="form-control" placeholder="Search here" /> -->
           <div  style="width: 40px; height: 40px; line-height: 40px;"></div>
         </div>
       </div>
@@ -50,10 +50,10 @@
       <!-- Content -->
       <div class="container my-4">
 
-        <!-- Tombol untuk buka modal -->
+        <!-- Tombol untuk buka modal
         <div class="mb-3">
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahModal">Tambah Barang</button>
-        </div>
+        </div> -->
 
         <table class="table table-bordered text-center align-middle">
           <thead>
@@ -69,7 +69,7 @@
           </thead>
           <tbody>
             @foreach($dataBarang as $barang)
-              <tr>
+            <tr>
                 <td>{{ $barang->id }}</td>
                 <td>{{ $barang->tanggal }}</td>
                 <td>{{ $barang->kode_barang }}</td>
@@ -77,7 +77,7 @@
                 <td>{{ $barang->harga }}</td>
                 <td>{{ $barang->ukuran }}</td>
                 <td>{{ $barang->jumlah }}</td>
-              </tr>
+            </tr>
             @endforeach
           </tbody>
         </table>

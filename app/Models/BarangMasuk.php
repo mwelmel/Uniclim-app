@@ -8,17 +8,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BarangMasuk extends Model
 {
     use HasFactory;
+
     protected $table = 'barang_masuk';
+
     protected $fillable = [
         'tanggal',
         'kode_barang',
         'nama_barang',
-        'harga_awal',
-        'harga_dikonversi',
+        'harga',
         'ukuran',
         'jumlah',
-        'ukuran_dipotong',
         'total',
     ];
-}
 
+    // Relasi BarangMasuk ke Barang berdasarkan kode_barang
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'kode_barang', 'kode_barang');
+    }
+}
