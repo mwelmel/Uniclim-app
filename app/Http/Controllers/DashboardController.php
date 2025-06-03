@@ -19,9 +19,10 @@ class DashboardController extends Controller
     $refunded = 0; // Bisa dimodifikasi jika ada field "status" untuk return
 
     // Data grafik per bulan
-    $monthlySales = BarangKeluar::selectRaw('MONTH(tanggal) as month, SUM(jumlah * harga_dikonversi) as total')
-        ->groupByRaw('MONTH(tanggal)')
+    $monthlySales = BarangKeluar::selectRaw("strftime('%m', tanggal) as month, SUM(jumlah * harga_dikonversi) as total")
+        ->groupByRaw("strftime('%m', tanggal)")
         ->pluck('total', 'month');
+
 
     $monthlyLabels = [];
     $monthlyData = [];
