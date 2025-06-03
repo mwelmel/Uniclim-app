@@ -9,8 +9,8 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $dataBarang = Barang::all(); // Mengambil semua data barang
-        return view('databarang', compact('dataBarang'));
+    $dataBarang = Barang::all();
+    return view('databarang', compact('dataBarang'));
     }
 
     public function store(Request $request)
