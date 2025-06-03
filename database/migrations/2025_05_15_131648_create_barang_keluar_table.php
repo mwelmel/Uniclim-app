@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('barang_keluar', function (Blueprint $table) {
-        $table->id();
+        $table->string('id',20)->primary();
         $table->date('tanggal');
         $table->string('kode_barang');
         $table->string('nama_barang');
@@ -23,6 +23,7 @@ return new class extends Migration
         $table->string('ukuran_dipotong');
         $table->decimal('total', 15, 2);
         $table->timestamps();
+        $table->string('mata_uang')->default('IDR'); // Tambahkan kolom mata_uang dengan default IDR
         });
     }
 
