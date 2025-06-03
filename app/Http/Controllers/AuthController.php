@@ -10,16 +10,24 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {
-        $account = Account::where('username', $request->username)->first();
+{
+    $account = Account::where('username', $request->username)->first();
 
-        if ($account && Hash::check($request->password, $account->password)) {
-            Auth::login($account); // Gunakan Auth bawaan Laravel
+    if ($account && Hash::check($request->password, $account->password)) {
+        Auth::login($account); // Login user
+
+        // Cek username
+        $allowedUsers = ['Chandra', 'Angelique'];
+        if (in_array($account->username, $allowedUsers)) {
             return redirect('/dashboard');
         } else {
-            return back()->withErrors(['Username atau password salah.']);
+            return redirect('/databarang');
         }
+    } else {
+        return back()->withErrors(['Username atau password salah.']);
     }
+}
+
 
     public function accountPage()
     {

@@ -52,7 +52,7 @@
       <!-- Header -->
       <div class="bg-success text-white p-4 d-flex justify-content-between align-items-center">
         <div>
-          <h5 class="mb-1">Welcome back, {{ $userName ?? 'User' }}</h5>
+          <h5 class="mb-1">Welcome back, {{ auth()->user()->username }}</h5>
           <p class="mb-0" style="font-size: 0.9rem;">Let’s take a detailed look at your financial situation today</p>
         </div>
         <div class="d-flex align-items-center gap-3">

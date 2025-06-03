@@ -9,27 +9,31 @@ class DashboardController extends Controller
 {
     public function index()
 {
-    $userName = auth()->user()->name ?? 'User';
+    $user = auth()->user();
+    $allowedUsers = ['Chandra', 'Angelique'];
 
+    if (!in_array($user->username, $allowedUsers)) {
+        return redirect('/databarang')->with('error', 'Maaf, Anda tidak dapat mengakses halaman ini.');
+    }
+
+    $userName = $user->name ?? 'User';
     $barangKeluar = BarangKeluar::all();
 
     $totalSales = $barangKeluar->sum('jumlah');
     $salesRevenue = $barangKeluar->sum(fn($item) => $item->jumlah * $item->harga_dikonversi);
     $totalOrders = $barangKeluar->count();
-    $refunded = 0; // Bisa dimodifikasi jika ada field "status" untuk return
+    $refunded = 0;
 
-    // Data grafik per bulan
     $monthlySales = BarangKeluar::selectRaw("MONTH(tanggal) as month, SUM(jumlah * harga_dikonversi) as total")
-    ->groupByRaw("MONTH(tanggal)")
-    ->orderByRaw("MONTH(tanggal)")
-    ->pluck('total', 'month');
-
+        ->groupByRaw("MONTH(tanggal)")
+        ->orderByRaw("MONTH(tanggal)")
+        ->pluck('total', 'month');
 
     $monthlyLabels = [];
     $monthlyData = [];
 
     foreach (range(1, 12) as $month) {
-        $monthlyLabels[] = Carbon::create()->month($month)->format('F');
+        $monthlyLabels[] = \Carbon\Carbon::create()->month($month)->format('F');
         $monthlyData[] = $monthlySales[$month] ?? 0;
     }
 
