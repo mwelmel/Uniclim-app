@@ -17,7 +17,7 @@
       <ul class="nav flex-column">
         <li class="nav-item"><a class="nav-link active text-success" href="/dashboard">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/databarang">Data Barang</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/barangmasuk">Barang Masuk</a></li>
+        <li class="nav-item"><a class="nav-link active text-success" href="/barangmasuk">Barang Masuk</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/barangkeluar">Barang Keluar</a></li>
         <hr class="bg-light" />
         <li class="nav-item"><a class="nav-link text-white" href="/account">Account</a></li>
