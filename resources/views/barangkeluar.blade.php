@@ -72,7 +72,7 @@
             <td>{{ $barang->ukuran_dipotong }}</td>
             <td>{{ $barang->total }}</td>
             <td>
-              <a href="{{ route('barangkeluar.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br />
+              <!-- <a href="{{ route('barangkeluar.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br /> -->
               <form action="{{ route('barangkeluar.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                 @csrf @method('DELETE')
                 <button class="btn btn-danger btn-sm">Delete</button>

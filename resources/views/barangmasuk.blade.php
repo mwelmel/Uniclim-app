@@ -85,7 +85,7 @@
               <td>{{ $barang->jumlah }}</td>
               <td>{{ $barang->total }}</td>
               <td>
-                <a href="{{ route('barangmasuk.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br />
+                <!-- <a href="{{ route('barangmasuk.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br /> -->
                 <form action="{{ route('barangmasuk.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                   @csrf
                   @method('DELETE')
@@ -164,13 +164,16 @@
 
   <script>
   $(document).ready(function () {
-    $('#barangmasukTable').DataTable();
+    const table = $('#barangmasukTable').DataTable();
+
+    $('#searchByKode').on('keyup', function () {
+      table.column(2).search(this.value).draw();
+    });
 
     function hitungTotal() {
       let harga = parseFloat($('#harga').val()) || 0;
       let ukuran = parseFloat($('#ukuran').val()) || 0;
       let jumlah = parseInt($('#jumlah').val()) || 1;
-
       let total = harga * ukuran * jumlah;
       $('#total').val(total.toFixed(2));
     }
