@@ -17,14 +17,14 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('barang_masuk', function (Blueprint $table) {
-        $table->decimal('harga')->nullable()->change();  // atau tipe asal Anda
-        $table->decimal('total')->change();            // atau tipe asal Anda
-        });
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     Schema::table('barang_masuk', function (Blueprint $table) {
+    //     $table->decimal('harga')->nullable()->change();  // atau tipe asal Anda
+    //     $table->decimal('total')->change();            // atau tipe asal Anda
+    //     });
+    // }
 };
