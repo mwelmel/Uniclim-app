@@ -163,47 +163,20 @@
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
   <script>
-    $(document).ready(function () {
-      $('#barangmasukTable').DataTable();
+  $(document).ready(function () {
+    $('#barangmasukTable').DataTable();
 
-      // function hitungKonversi() {
-      //   let harga_awal = parseFloat($('#harga_awal').val()) || 0;
-      //   let ukuran = parseFloat($('#ukuran').val()) || 0;
-      //   let ukuran_dipotong = parseFloat($('#ukuran_dipotong').val()) || 0;
-      //   let jumlah = parseInt($('#jumlah').val()) || 1;
+    function hitungTotal() {
+      let harga = parseFloat($('#harga').val()) || 0;
+      let ukuran = parseFloat($('#ukuran').val()) || 0;
+      let jumlah = parseInt($('#jumlah').val()) || 1;
 
-      //   if (harga_awal <= 0 || ukuran <= 0 || ukuran_dipotong <= 0) {
-      //     $('#harga_dikonversi').val('');
-      //     $('#total').val('');
-      //     return;
-      //   }
+      let total = harga * ukuran * jumlah;
+      $('#total').val(total.toFixed(2));
+    }
 
-    //     $.ajax({
-    //       url: "{{ route('barangkeluar.konversi') }}",
-    //       type: "POST",
-    //       headers: {
-    //         'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    //       },
-    //       data: {
-    //         harga_awal: harga_awal,
-    //         ukuran: ukuran,
-    //         ukuran_dipotong: ukuran_dipotong,
-    //         jumlah: jumlah
-    //       },
-    //       success: function (data) {
-    //         $('#harga_dikonversi').val(data.harga_dikonversi);
-    //         $('#total').val(data.total);
-    //       },
-    //       error: function (xhr) {
-    //         console.error(xhr.responseJSON?.error || 'Terjadi kesalahan konversi');
-    //         $('#harga_dikonversi').val('');
-    //         $('#total').val('');
-    //       }
-    //     });
-    //   }
-
-    //   $('#harga_awal, #ukuran, #ukuran_dipotong, #jumlah').on('input', hitungKonversi);
-    // });
-  </script>
+    $('#harga, #ukuran, #jumlah').on('input', hitungTotal);
+  });
+</script>
 </body>
 </html>
