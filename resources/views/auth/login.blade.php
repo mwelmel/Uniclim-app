@@ -8,7 +8,7 @@
 <body>
     <div class="background">
         <div class="logo">
-            <img src="{{ asset('images/Logo UniCLim.png') }}" alt="UniClim Logo">
+            <img src="{{ asset('images\Logo_UniClim.png') }}" alt="UniClim Logo">
         </div>
 
         <div class="login-box">
