@@ -56,3 +56,4 @@ Route::get('/barangmasuk/{id}/edit', [BarangMasukController::class, 'edit'])->na
 Route::put('/barangmasuk/{id}', [BarangMasukController::class, 'update'])->name('barangmasuk.update');
 Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
 Route::post('/barangmasuk/konversi', [BarangMasukController::class, 'konversi'])->name('barangmasuk.konversi');
+Route::resource('barangmasuk', BarangMasukController::class);
