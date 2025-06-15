@@ -1,46 +1,55 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
-{
-    $userName = auth()->user()->name ?? 'User';
+    {
+        $userName = auth()->user()->name ?? 'User';
 
-    $barangKeluar = BarangKeluar::all();
+        // Ambil semua data barang keluar
+        $barangKeluar = BarangKeluar::all();
 
-    $totalSales = $barangKeluar->sum('jumlah');
-    $salesRevenue = $barangKeluar->sum(fn($item) => $item->jumlah * $item->harga_dikonversi);
-    $totalOrders = $barangKeluar->count();
-    $refunded = 0; // Bisa dimodifikasi jika ada field "status" untuk return
+        // Hitung total penjualan
+        $totalSales = $barangKeluar->sum('jumlah');
 
-    // Data grafik per bulan
-    $monthlySales = BarangKeluar::selectRaw("MONTH(tanggal) as month, SUM(jumlah * harga_dikonversi) as total")
-    ->groupByRaw("MONTH(tanggal)")
-    ->orderByRaw("MONTH(tanggal)")
-    ->pluck('total', 'month');
+        // Hitung pendapatan
+        $salesRevenue = $barangKeluar->sum(function ($item) {
+            return $item->jumlah * $item->harga_dikonversi;
+        });
 
+        // Untuk refund (jika ada field status, misal: status = 'refunded')
+        $refunded = 0;
 
-    $monthlyLabels = [];
-    $monthlyData = [];
+        // Data grafik: total penjualan per bulan
+        $monthlySales = BarangKeluar::selectRaw('MONTH(tanggal) as month, SUM(jumlah * harga_dikonversi) as total')
+            ->groupBy(DB::raw('MONTH(tanggal)'))
+            ->orderBy(DB::raw('MONTH(tanggal)'))
+            ->pluck('total', 'month')
+            ->toArray();
 
-    foreach (range(1, 12) as $month) {
-        $monthlyLabels[] = Carbon::create()->month($month)->format('F');
-        $monthlyData[] = $monthlySales[$month] ?? 0;
+        // Siapkan label bulan dan data (jan-des)
+        $monthlyLabels = [];
+        $monthlyData = [];
+
+        foreach (range(1, 12) as $month) {
+            $monthlyLabels[] = Carbon::create()->month($month)->locale('id')->translatedFormat('F'); 
+            $monthlyData[] = isset($monthlySales[$month]) ? round($monthlySales[$month], 2) : 0;
+        }
+
+        return view('dashboard', compact(
+            'userName',
+            'totalSales',
+            'salesRevenue',
+            'refunded',
+            'monthlyLabels',
+            'monthlyData'
+        ));
     }
-
-    return view('dashboard', compact(
-        'userName',
-        'totalSales',
-        'salesRevenue',
-        'totalOrders',
-        'refunded',
-        'monthlyLabels',
-        'monthlyData'
-    ));
-}
 }
