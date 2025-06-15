@@ -25,44 +25,58 @@ class BarangMasukController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'kode_barang' => 'nullable|string|max:255',  // nullable jika mau generate otomatis
-            'nama_barang' => 'required|string|max:255',
-            'harga' => 'nullable|numeric|min:0',
-            'ukuran' => 'required|string|max:255',
-            'jumlah' => 'required|integer|min:1',
-            'total' => 'required|numeric|min:0',
-        ]);
+{
+    $validated = $request->validate([
+        'tanggal' => 'required|date',
+        'kode_barang' => 'required|string',
+        'nama_barang' => 'required|string',
+        'harga' => 'required|numeric|min:0',
+        'ukuran' => 'required|numeric|min:0',
+        'jumlah' => 'required|integer|min:1',
+    ]);
 
-        // Jika kode_barang tidak diisi, generate random
-        if (empty($validated['kode_barang'])) {
-            $validated['kode_barang'] = $this->generateKodeBarang();
-        }
+    $existing = BarangMasuk::where('kode_barang', $validated['kode_barang'])
+        ->where('nama_barang', $validated['nama_barang'])
+        ->first();
 
-        // Simpan data barang masuk
-        $barangMasuk = BarangMasuk::create($validated);
+    $kodeDipakaiBarangLain = BarangMasuk::where('kode_barang', $validated['kode_barang'])
+        ->where('nama_barang', '!=', $validated['nama_barang'])
+        ->exists();
 
-        // Update atau tambah stok barang
-        $barang = Barang::where('kode_barang', $validated['kode_barang'])->first();
-
-        if ($barang) {
-            $barang->jumlah += $validated['jumlah'];
-            $barang->save();
-        } else {
-            Barang::create([
-                'tanggal' => $validated['tanggal'],
-                'kode_barang' => $validated['kode_barang'],
-                'nama_barang' => $validated['nama_barang'],
-                'harga' => $validated['harga'] ?? 0,
-                'ukuran' => $validated['ukuran'],
-                'jumlah' => $validated['jumlah'],
-            ]);
-        }
-
-        return redirect()->route('barangmasuk.index')->with('success', 'Barang masuk berhasil ditambahkan dan stok diperbarui.');
+    if ($kodeDipakaiBarangLain) {
+        return redirect()->back()->withErrors(['kode_barang' => 'Kode barang sudah digunakan untuk barang lain.']);
     }
+
+    if ($existing) {
+        // Update jumlah + total di barang masuk
+        $existing->jumlah += $validated['jumlah'];
+        $existing->total = $existing->harga * $existing->ukuran * $existing->jumlah;
+        $existing->save();
+    } else {
+        // Insert baru
+        $validated['total'] = $validated['harga'] * $validated['ukuran'] * $validated['jumlah'];
+        $existing = BarangMasuk::create($validated);
+    }
+
+    // === Update atau insert ke Barang ===
+    $barang = Barang::where('kode_barang', $validated['kode_barang'])->first();
+    if ($barang) {
+        $barang->jumlah += $validated['jumlah'];
+        $barang->save();
+    } else {
+        Barang::create([
+            'tanggal' => $validated['tanggal'],
+            'kode_barang' => $validated['kode_barang'],
+            'nama_barang' => $validated['nama_barang'],
+            'harga' => $validated['harga'],
+            'ukuran' => $validated['ukuran'],
+            'jumlah' => $validated['jumlah'],
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Data barang masuk berhasil disimpan dan stok diperbarui!');
+    }
+
 
     public function update(Request $request, $id)
     {

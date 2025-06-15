@@ -18,90 +18,134 @@ class BarangKeluarController extends Controller
 
     public function store(Request $request)
     {
-        $currency = $request->currency;
-        $request->validate([
-            'tanggal' => 'required|date',
-            'kode_barang' => 'required|string|max:255',
-            'nama_barang' => 'required|string|max:255',
-            'harga_awal' => 'required|numeric',
-            'ukuran' => 'required|numeric',
-            'jumlah' => 'required|integer|min:1',
-            'ukuran_dipotong' => 'required|numeric',
-            'harga_dikonversi' => 'required|string',
-            'total' => 'required|string',
-            'currency' => 'nullable|string|max:3',
-        ]);
+    $currency = $request->currency;
+    $request->validate([
+        'tanggal' => 'required|date',
+        'kode_barang' => 'required|string|max:255',
+        'nama_barang' => 'required|string|max:255',
+        'harga_awal' => 'required|numeric',
+        'ukuran' => 'required|numeric',
+        'jumlah' => 'required|integer|min:1',
+        'ukuran_dipotong' => 'required|numeric',
+        'harga_dikonversi' => 'required|string',
+        'total' => 'required|string',
+        'currency' => 'nullable|string|max:3',
+    ]);
 
-        // Hapus karakter Rp, $, spasi, dan titik ribuan, ganti koma dengan titik
-        $harga_dikonversi_raw = $request->harga_dikonversi;
-        $harga_dikonversi = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $harga_dikonversi_raw)));
+    $harga_dikonversi_raw = $request->harga_dikonversi;
+    $harga_dikonversi = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $harga_dikonversi_raw)));
 
-        $total_raw = $request->total;
-        $total = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $total_raw)));
-        $id = Str::random(10); // Generate random ID
-        
-        BarangKeluar::create([
-            'id' => $id,
-            'tanggal' => $request->tanggal,
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'harga_awal' => $request->harga_awal,
-            'ukuran' => $request->ukuran,
-            'jumlah' => $request->jumlah,
-            'ukuran_dipotong' => $request->ukuran_dipotong,
-            'harga_dikonversi' => $harga_dikonversi,
-            'total' => $total,
-            'mata_uang' => $request->currency ?? 'IDR',
-        ]);
+    $total_raw = $request->total;
+    $total = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $total_raw)));
 
-        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil ditambahkan');
+    $id = Str::random(10);
+
+    BarangKeluar::create([
+        'id' => $id,
+        'tanggal' => $request->tanggal,
+        'kode_barang' => $request->kode_barang,
+        'nama_barang' => $request->nama_barang,
+        'harga_awal' => $request->harga_awal,
+        'ukuran' => $request->ukuran,
+        'jumlah' => $request->jumlah,
+        'ukuran_dipotong' => $request->ukuran_dipotong,
+        'harga_dikonversi' => $harga_dikonversi,
+        'total' => $total,
+        'mata_uang' => $request->currency ?? 'IDR',
+    ]);
+
+    // Kurangi stok di tabel Barang
+    $barang = Barang::where('kode_barang', $request->kode_barang)->first();
+    if ($barang) {
+        $barang->jumlah -= $request->jumlah;
+        if ($barang->jumlah < 0) $barang->jumlah = 0;
+        $barang->save();
     }
+
+    return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil ditambahkan dan stok dikurangi');
+    }
+
 
     public function update(Request $request, $id)
-    {
-        $barang = BarangKeluar::findOrFail($id);
+{
+    $barangKeluar = BarangKeluar::findOrFail($id);
 
-        $request->validate([
-            'tanggal' => 'required|date',
-            'kode_barang' => 'required|string|max:255',
-            'nama_barang' => 'required|string|max:255',
-            'harga_awal' => 'required|numeric',
-            'harga_dikonversi' => 'required|string',
-            'ukuran' => 'required|numeric',
-            'jumlah' => 'required|integer|min:1',
-            'ukuran_dipotong' => 'required|numeric',
-            'total' => 'required|string',
-            'currency' => 'nullable|string|max:3',
-        ]);
+    $request->validate([
+        'tanggal' => 'required|date',
+        'kode_barang' => 'required|string|max:255',
+        'nama_barang' => 'required|string|max:255',
+        'harga_awal' => 'required|numeric',
+        'harga_dikonversi' => 'required|string',
+        'ukuran' => 'required|numeric',
+        'jumlah' => 'required|integer|min:1',
+        'ukuran_dipotong' => 'required|numeric',
+        'total' => 'required|string',
+        'currency' => 'nullable|string|max:3',
+    ]);
 
-        $harga_dikonversi_raw = $request->harga_dikonversi;
-        $harga_dikonversi = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $harga_dikonversi_raw)));
+    $harga_dikonversi_raw = $request->harga_dikonversi;
+    $harga_dikonversi = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $harga_dikonversi_raw)));
 
-        $total_raw = $request->total;
-        $total = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $total_raw)));
+    $total_raw = $request->total;
+    $total = floatval(str_replace(',', '.', preg_replace('/[^\d,\.]/', '', $total_raw)));
 
-        $barang->update([
-            'tanggal' => $request->tanggal,
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'harga_awal' => $request->harga_awal,
-            'harga_dikonversi' => $harga_dikonversi,
-            'ukuran' => $request->ukuran,
-            'jumlah' => $request->jumlah,
-            'ukuran_dipotong' => $request->ukuran_dipotong,
-            'total' => $total,
-            'mata_uang' => $request->currency ?? $barang->mata_uang,
-        ]);
-
-        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil diperbarui');
+    // Kembalikan stok lama
+    $barang = Barang::where('kode_barang', $barangKeluar->kode_barang)->first();
+    if ($barang) {
+        $barang->jumlah += $barangKeluar->jumlah;
     }
+
+    // Kurangi stok baru
+    if ($request->kode_barang !== $barangKeluar->kode_barang) {
+        // Kalau kode barang ganti, sesuaikan stok kedua barang
+        if ($barang) $barang->save();
+
+        $barangBaru = Barang::where('kode_barang', $request->kode_barang)->first();
+        if ($barangBaru) {
+            $barangBaru->jumlah -= $request->jumlah;
+            if ($barangBaru->jumlah < 0) $barangBaru->jumlah = 0;
+            $barangBaru->save();
+        }
+    } else {
+        // Kalau kode barang sama
+        $barang->jumlah -= $request->jumlah;
+        if ($barang->jumlah < 0) $barang->jumlah = 0;
+        $barang->save();
+    }
+
+    $barangKeluar->update([
+        'tanggal' => $request->tanggal,
+        'kode_barang' => $request->kode_barang,
+        'nama_barang' => $request->nama_barang,
+        'harga_awal' => $request->harga_awal,
+        'harga_dikonversi' => $harga_dikonversi,
+        'ukuran' => $request->ukuran,
+        'jumlah' => $request->jumlah,
+        'ukuran_dipotong' => $request->ukuran_dipotong,
+        'total' => $total,
+        'mata_uang' => $request->currency ?? $barangKeluar->mata_uang,
+    ]);
+
+    return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil diperbarui dan stok disesuaikan');
+    }
+
 
     public function destroy($id)
     {
-        BarangKeluar::destroy($id);
+    $barangKeluar = BarangKeluar::findOrFail($id);
 
-        return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil dihapus');
+    // Kembalikan stok
+    $barang = Barang::where('kode_barang', $barangKeluar->kode_barang)->first();
+    if ($barang) {
+        $barang->jumlah += $barangKeluar->jumlah;
+        $barang->save();
     }
+
+    $barangKeluar->delete();
+
+    return redirect()->route('barangkeluar.index')->with('success', 'Barang keluar berhasil dihapus dan stok dikembalikan');
+    }
+
 
     public function edit($id)
     {

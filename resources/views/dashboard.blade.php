@@ -24,8 +24,8 @@
         $allowedUsers = ['Chandra', 'Angelique'];
     @endphp
 
-    @if (in_array(auth()->user()->username, $allowedUsers))
-        <li class="nav-item"><a class="nav-link active text-success" href="/dashboard">Dashboard</a></li>
+    @if (auth()->check() && in_array(auth()->user()->username, $allowedUsers))
+    <li class="nav-item"><a class="nav-link active text-success" href="/dashboard">Dashboard</a></li>
     @endif
         <li class="nav-item"><a class="nav-link text-white" href="/databarang">Data Barang</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/barangmasuk">Barang Masuk</a></li>
@@ -77,13 +77,6 @@
               <h4>Sales Revenue</h4>
               <h2 class="text-warning fs-5">Rp {{ number_format($salesRevenue, 0, ',', '.') }}</h2>
               <small class="text-success">Calculated from jumlah × harga</small>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="bg-white p-3 rounded shadow-sm stat-card">
-              <h4>Total Orders</h4>
-              <h2 class="text-primary">{{ $totalOrders }}</h2>
-              <small class="text-success">Total transaksi keluar</small>
             </div>
           </div>
           <div class="col-md-3">

@@ -13,7 +13,7 @@
   <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar bg-dark text-white p-3" style="width: 220px; min-height: 100vh;">
-      <img src="{{ asset('images\Logo_UniClim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
+      <img src="{{ asset('images/Logo_UniClim.png') }}" alt="UniClim Logo" class="img-fluid mb-4" style="max-width: 150px;" />
       <ul class="nav flex-column">
         <li class="nav-item"><a class="nav-link text-white" href="/dashboard">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/databarang">Data Barang</a></li>
@@ -21,44 +21,27 @@
         <li class="nav-item"><a class="nav-link text-white" href="/barangkeluar">Barang Keluar</a></li>
         <hr class="bg-light" />
         <li class="nav-item"><a class="nav-link text-white" href="/account">Account</a></li>
-
-        <!-- Logout dengan form POST -->
         <li class="nav-item">
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-           @csrf
-          </form>
-          <a href="#" class="nav-link text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            Log Out
-          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+          <a href="#" class="nav-link text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
         </li>
       </ul>
     </div>
 
-
     <!-- Main Content -->
     <div class="flex-grow-1 bg-light">
-      <!-- Header -->
       <div class="bg-success text-white p-4 d-flex justify-content-between align-items-center">
         <div>
           <h5 class="mb-1">Barang Masuk</h5>
           <p class="mb-0" style="font-size: 0.9rem;">Laporan barang masuk hari ini dan sebelumnya</p>
         </div>
-        <div class="d-flex align-items-center gap-3">
-          <div style="width: 40px; height: 40px; line-height: 40px;">
-          </div>
-        </div>
       </div>
 
-      <!-- Action Buttons -->
       <div class="container my-4">
-        <div class="d-flex justify-content-start gap-3 mb-3">
-          <!-- Button to open modal -->
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
-            <i class="bi bi-plus-circle"></i> Tambah Barang Masuk
-          </button>
-        </div>
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
+          <i class="bi bi-plus-circle"></i> Tambah Barang Masuk
+        </button>
 
-        <!-- Table -->
         <table class="table table-bordered text-center align-middle" id="barangmasukTable">
           <thead>
             <tr class="table-success">
@@ -85,10 +68,8 @@
               <td>{{ $barang->jumlah }}</td>
               <td>{{ $barang->total }}</td>
               <td>
-                <!-- <a href="{{ route('barangmasuk.edit', $barang->id) }}" class="btn btn-success btn-sm mb-1">Edit</a><br /> -->
                 <form action="{{ route('barangmasuk.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                  @csrf
-                  @method('DELETE')
+                  @csrf @method('DELETE')
                   <button class="btn btn-danger btn-sm">Delete</button>
                 </form>
               </td>
@@ -100,7 +81,7 @@
     </div>
   </div>
 
-  <!-- Modal Tambah Barang Keluar -->
+  <!-- Modal Tambah Barang -->
   <div class="modal fade" id="tambahBarangModal" tabindex="-1" aria-labelledby="tambahBarangModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <form method="POST" action="{{ route('barangmasuk.store') }}">
@@ -111,6 +92,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            @if ($errors->any())
+          <div class="alert alert-danger">
+           <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+          </div>
+            @endif
+
             <div class="mb-3">
               <label for="tanggal" class="form-label">Tanggal</label>
               <input type="date" class="form-control" id="tanggal" name="tanggal" required />
@@ -127,10 +118,6 @@
               <label for="harga" class="form-label">Harga</label>
               <input type="number" step="0.01" min="0" class="form-control" id="harga" name="harga" />
             </div>
-            <!-- <div class="mb-3">
-              <label for="harga_dikonversi" class="form-label">Harga Dikonversi</label>
-              <input type="number" step="0.01" class="form-control" id="harga_dikonversi" name="harga_dikonversi" readonly />
-            </div> -->
             <div class="mb-3">
               <label for="ukuran" class="form-label">Ukuran</label>
               <input type="number" step="0.01" min="0" class="form-control" id="ukuran" name="ukuran" required />
@@ -139,10 +126,6 @@
               <label for="jumlah" class="form-label">Jumlah</label>
               <input type="number" min="1" class="form-control" id="jumlah" name="jumlah" required value="1" />
             </div>
-            <!-- <div class="mb-3">
-              <label for="ukuran_dipotong" class="form-label">Ukuran Dipotong</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="ukuran_dipotong" name="ukuran_dipotong" required />
-            </div> -->
             <div class="mb-3">
               <label for="total" class="form-label">Total</label>
               <input type="number" step="0.01" class="form-control" id="total" name="total" readonly />
@@ -157,29 +140,26 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
   <script>
   $(document).ready(function () {
     const table = $('#barangmasukTable').DataTable();
 
-    $('#searchByKode').on('keyup', function () {
-      table.column(2).search(this.value).draw();
-    });
-
-    function hitungTotal() {
+    $('#harga, #ukuran, #jumlah').on('input', function () {
       let harga = parseFloat($('#harga').val()) || 0;
       let ukuran = parseFloat($('#ukuran').val()) || 0;
       let jumlah = parseInt($('#jumlah').val()) || 1;
       let total = harga * ukuran * jumlah;
       $('#total').val(total.toFixed(2));
-    }
+    });
 
-    $('#harga, #ukuran, #jumlah').on('input', hitungTotal);
+    @if ($errors->any())
+     $('#tambahBarangModal').modal('show');
+    @endif
+
   });
-</script>
+  </script>
 </body>
 </html>
